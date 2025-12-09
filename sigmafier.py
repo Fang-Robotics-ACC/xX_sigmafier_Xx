@@ -1,4 +1,10 @@
 import discord
+from os import environ
+from dotenv import load_dotenv 
+
+load_dotenv()
+token = environ['TOKEN']
+
 
 class SigmaClient(discord.Client):
     async def on_ready(self):
@@ -18,4 +24,4 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = SigmaClient(intents=intents)
-client.run()
+client.run(token)
