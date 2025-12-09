@@ -1,4 +1,4 @@
 # Prevent discord tokens from being leaked
-config.yml
+.env
 
 Pipfile
