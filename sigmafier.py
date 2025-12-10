@@ -30,7 +30,8 @@ class SigmaClient(discord.Client):
                 if(is_member_or_onboarding(member)):
                     self._fang_participants.append(member)
         print(f'Logged on as {self.user}!')
-        print(self._fang_participants)
+        await self.blast_all_participants("This is a mass dm test from Fang Robotics... yay!!!!")
+
 
 
 
