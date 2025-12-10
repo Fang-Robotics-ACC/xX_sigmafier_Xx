@@ -28,7 +28,6 @@ class SigmaClient(discord.Client):
             for member in guild.members:
                 #print(member.roles)
                 if(is_member_or_onboarding(member)):
-                    print(member.name)
                     self._fang_participants.append(member)
         print(f'Logged on as {self.user}!')
         print(self._fang_participants)
