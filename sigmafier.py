@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 token = environ['TOKEN']
 
+def is_member_or_onboarding(member):
+    for role in member.roles:
+        if role.name == "Onboarding" or role.name == "Member":
+            return True
+    return False
 
 class SigmaClient(discord.Client):
     async def on_ready(self):
