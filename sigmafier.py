@@ -12,6 +12,10 @@ def is_member_or_onboarding(member):
     return False
 
 class SigmaClient(discord.Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._fang_participants = []
+
     async def on_ready(self):
         for guild in self.guilds:
             for member in guild.members:
