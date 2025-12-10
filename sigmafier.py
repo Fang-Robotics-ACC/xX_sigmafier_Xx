@@ -14,11 +14,16 @@ class SigmaClient(discord.Client):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
             return
+        author = message.author
 
         if message.content.startswith('!hello motto'):
             await message.reply('ur actually rlly cool, and you dont smell like pizza', mention_author=True)
+            await author.send("Derp Motto")
+
         elif message.content.startswith('!hello'):
             await message.reply('still stinky', mention_author=True)
+            await author.send("Derp")
+
 
 intents = discord.Intents.default()
 intents.message_content = True
