@@ -7,7 +7,7 @@ token = environ['TOKEN']
 
 def is_member_or_onboarding(member):
     for role in member.roles:
-        if role.name == "Onboarding" or role.name == "Member":
+        if (role.name == "Onboarding" or role.name == "Member") and not (role.name == "Faculty Advisor"):
             return True
     return False
 
