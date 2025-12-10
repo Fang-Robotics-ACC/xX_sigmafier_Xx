@@ -13,7 +13,14 @@ def is_member_or_onboarding(member):
 
 class SigmaClient(discord.Client):
     async def on_ready(self):
+        for guild in self.guilds:
+            for member in guild.members:
+                #print(member.roles)
+                if(is_member_or_onboarding(member)):
+                    print(member.name)
         print(f'Logged on as {self.user}!')
+
+
 
     async def on_message(self, message):
         # we do not want the bot to reply to itself
