@@ -16,6 +16,13 @@ class SigmaClient(discord.Client):
         super().__init__(*args, **kwargs)
         self._fang_participants = []
 
+    async def blast_all_participants(self, message_content):
+        for participant in self._fang_participants:
+            try:
+                await participant.send(message_content)
+            except:
+                print(participant.name + " did not recieve message!!!")
+
     async def on_ready(self):
         for guild in self.guilds:
             for member in guild.members:
