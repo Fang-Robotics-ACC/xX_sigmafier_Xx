@@ -86,6 +86,13 @@ class SigmaClient(discord.Client):
 
         
 
+        if message.channel.type == discord.ChannelType.private:
+            print("Message is in dm")
+            print(message.content)
+        else:
+            print("Message is not in dm")
+            print(message.content)
+
 
 intents = discord.Intents.default()
 intents.message_content = True
