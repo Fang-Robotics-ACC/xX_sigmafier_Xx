@@ -49,6 +49,13 @@ class SigmaClient(discord.Client):
             await message.reply('still stinky', mention_author=True)
             await author.send("Derp")
 
+        if message.channel.type == discord.ChannelType.private:
+            print("Message is in dm")
+            print(message.content)
+        else:
+            print("Message is not in dm")
+            print(message.content)
+
 
 intents = discord.Intents.default()
 intents.message_content = True
