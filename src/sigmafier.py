@@ -1,9 +1,4 @@
 import discord
-from os import environ
-from dotenv import load_dotenv 
-
-load_dotenv()
-token = environ['TOKEN']
 
 def is_member_or_onboarding(member):
     for role in member.roles:
@@ -55,11 +50,3 @@ class SigmaClient(discord.Client):
         else:
             print("Message is not in dm")
             print(message.content)
-
-
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-
-client = SigmaClient(intents=intents)
-client.run(token)
