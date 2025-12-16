@@ -1,10 +1,13 @@
 from os import environ
 from dotenv import load_dotenv 
 
+from sigmafier import Sigmafier
+
 
 
 def main():
 
+    # Initialize
     load_dotenv()
     token = environ['TOKEN']
 
@@ -12,8 +15,11 @@ def main():
     intents.message_content = True
     intents.members = True
 
-    client = SigmaClient(intents=intents)
+    client = Sigmafier(intents=intents)
+
+    # I guess this does some async stuff or loop
     client.run(token)
+
 # For the uninitiated, this a main guard
 # It will only execute main if this file is the "entry point"
 # If this file happens to be imported for some reason, main() will
