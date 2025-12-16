@@ -1,7 +1,7 @@
 from os import environ
 from dotenv import load_dotenv 
-
 from sigmafier import Sigmafier
+import discord
 
 
 
