@@ -1,10 +1,12 @@
 import discord
 from member_filters import is_fang_participant
+from sillly_dialogue import SillyDialogue
 
 class Sigmafier(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._fang_participants = []
+        self._silly_dialogue = SillyDialogue()
 
     async def blast_all_participants(self, message_content):
         for participant in self._fang_participants:
@@ -29,19 +31,5 @@ class Sigmafier(discord.Client):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
             return
-        author = message.author
+        await self._silly_dialogue.on_message(message)
 
-        if message.content.startswith('!hello motto'):
-            await message.reply('ur actually rlly cool, and you dont smell like pizza', mention_author=True)
-            await author.send("Derp Motto")
-
-        elif message.content.startswith('!hello'):
-            await message.reply('still stinky', mention_author=True)
-            await author.send("Derp")
-
-        if message.channel.type == discord.ChannelType.private:
-            print("Message is in dm")
-            print(message.content)
-        else:
-            print("Message is not in dm")
-            print(message.content)
