@@ -1,7 +1,7 @@
 import discord
 from member_filters import is_fang_participant
 
-class SigmaClient(discord.Client):
+class Sigmafier(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._fang_participants = []
