@@ -1,10 +1,5 @@
 import discord
-
-def is_member_or_onboarding(member):
-    for role in member.roles:
-        if (role.name == "Onboarding" or role.name == "Member") and not (role.name == "Faculty Advisor"):
-            return True
-    return False
+from member_filters import is_fang_participant
 
 class SigmaClient(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -22,7 +17,7 @@ class SigmaClient(discord.Client):
         for guild in self.guilds:
             for member in guild.members:
                 #print(member.roles)
-                if(is_member_or_onboarding(member)):
+                if(is_fang_participant(member)):
                     self._fang_participants.append(member)
         print(f'Logged on as {self.user}!')
         await self.blast_all_participants("This is a mass dm test from Fang Robotics... yay!!!!")
