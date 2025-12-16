@@ -24,9 +24,6 @@ class Sigmafier(discord.Client):
         print(f'Logged on as {self.user}!')
         # await self.blast_all_participants("This is a mass dm test from Fang Robotics... yay!!!!")
 
-
-
-
     async def on_message(self, message):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
