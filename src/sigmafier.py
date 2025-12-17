@@ -38,6 +38,11 @@ class Sigmafier(discord.Client):
             if guild.name == "Fang Robotics" :
                 return guild
 
+    async def _announce_commits(self):
+        channel = self._announcement_channel
+        for participant, commit in self._commit_list.items():
+            name = participant.name
+            await channel.send(f"{name}'s commit is: {commit}")
 
     def initialize_fang_participants(self):
         fang_robotics_guild = self.get_fang_robotics_guild()
@@ -58,4 +63,5 @@ class Sigmafier(discord.Client):
             await self._silly_dialogue.on_message(message)
 
             if message.content == "!Announce":
-               await self._announcement_channel.send("hi!")
+                await self._announce_commits()
+                await self._announcement_channel.send("hi!")
