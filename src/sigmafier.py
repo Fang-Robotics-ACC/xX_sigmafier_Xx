@@ -19,6 +19,10 @@ class Sigmafier(discord.Client):
                 no_response_list.append(participant)
                 print(participant.name + " did not recieve message!!!")
 
+    async def _solicict_commit_message(self):
+        solicitation = "Hello! Please reply your weekly goal you will commit to! Your most recent reponse will be viewed as the commit!"
+        await self.blast_all_participants(solicitation)
+
     async def on_ready(self):
         self.initialize_fang_participants()
         self._announcement_channel = discord.utils.get(self.get_fang_robotics_guild().text_channels, name="team-announcements")
@@ -74,3 +78,5 @@ class Sigmafier(discord.Client):
 
             if message.content == "!Announce":
                 await self._announce_commits()
+            elif message.content == "!Solicit Commits":
+                await self._solicict_commit_message()
