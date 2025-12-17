@@ -18,13 +18,18 @@ def main():
     client = Sigmafier(intents=intents)
 
     # I guess this does some async stuff or loop
-    client.run(token)
+    try:
+        client.run(token)
+    except:
+        print("BACKUP")
+        client.backup()
 
 # For the uninitiated, this a main guard
 # It will only execute main if this file is the "entry point"
 # If this file happens to be imported for some reason, main() will
 # not be automatically executed
 # https://stackoverflow.com/questions/419163/what-does-if-name-main-do#419185
+
 
 if __name__ == "__main__":
     main()

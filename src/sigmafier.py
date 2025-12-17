@@ -1,7 +1,9 @@
 import discord
 from member_filters import is_fang_participant
 from sillly_dialogue import SillyDialogue
+import shelve
 
+BACKUP_FILE = "brain"
 class Sigmafier(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -9,6 +11,7 @@ class Sigmafier(discord.Client):
         self._silly_dialogue = SillyDialogue()
         self._commit_list = {}
         self._announcement_channel = None
+        self.restore()
 
     async def blast_all_participants(self, message_content):
         no_response_list = []
@@ -45,19 +48,24 @@ class Sigmafier(discord.Client):
         channel = self._announcement_channel
         commit_announcement = "Weekly Commits\n"
         for participant, commit in self._commit_list.items():
-            name = participant.name
+            name = participant[0]
             commit_announcement += f"{name}'s commit is: {commit}\n"
         await channel.send(commit_announcement)
 
-        non_commit_participants = set(self._fang_participants) - set(self._commit_list.keys())
+        non_commit_participants = set(self.hashed_fang_participants()) - set(self._commit_list.keys())
 
         lackers = "**Lacking Commits**\n"
         for participant in  non_commit_participants:
-            id = participant.id
+            id = participant[1]
             lackers += f"<@{id}> has no commits\n"
 
         await channel.send(lackers)
 
+    def hashed_fang_participants(self):
+        hashed_fang_participants = []
+        for participant in self._fang_participants:
+            hashed_fang_participants.append((participant.name, participant.id))
+        return hashed_fang_participants
 
     def initialize_fang_participants(self):
         fang_robotics_guild = self.get_fang_robotics_guild()
@@ -73,7 +81,8 @@ class Sigmafier(discord.Client):
             return
 
         if message.channel.type == discord.ChannelType.private:
-            self._commit_list[message.author] = message.content
+            self._commit_list[(message.author.name, message.author.id)] = message.content
+            self.backup()
         else:
             await self._silly_dialogue.on_message(message)
 
@@ -81,3 +90,15 @@ class Sigmafier(discord.Client):
                 await self._announce_commits()
             elif message.content == "!Solicit Commits":
                 await self._solicict_commit_message()
+    def backup(self):
+        backup_database= shelve.open(BACKUP_FILE)
+        backup_database["commit_list"] = self._commit_list
+        backup_database.close()
+
+    def restore(self): 
+        backup_database= shelve.open(BACKUP_FILE)
+        try:
+            self._commit_list =  backup_database["commit_list"]
+        except KeyError:
+            self._commit_list = {}
+        backup_database.close()
