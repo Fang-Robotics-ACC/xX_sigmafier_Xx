@@ -48,8 +48,8 @@ class Sigmafier(discord.Client):
         await channel.send("**Lacking commits**")
         lackers = ""
         for participant in  non_commit_participants:
-            name = participant.name
-            lackers += f"{name} has no commits\n"
+            id = participant.id
+            lackers += f"<@{id}> has no commits\n"
 
         await channel.send(lackers)
 
