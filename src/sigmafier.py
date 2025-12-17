@@ -43,14 +43,15 @@ class Sigmafier(discord.Client):
 
     async def _announce_commits(self):
         channel = self._announcement_channel
+        commit_announcement = "Weekly Commits\n"
         for participant, commit in self._commit_list.items():
             name = participant.name
-            await channel.send(f"{name}'s commit is: {commit}")
+            commit_announcement += f"{name}'s commit is: {commit}\n"
+        await channel.send(commit_announcement)
 
         non_commit_participants = set(self._fang_participants) - set(self._commit_list.keys())
 
-        await channel.send("**Lacking commits**")
-        lackers = ""
+        lackers = "**Lacking Commits**\n"
         for participant in  non_commit_participants:
             id = participant.id
             lackers += f"<@{id}> has no commits\n"
