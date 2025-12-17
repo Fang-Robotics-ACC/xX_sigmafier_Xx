@@ -7,16 +7,22 @@ class Sigmafier(discord.Client):
         super().__init__(*args, **kwargs)
         self._fang_participants = []
         self._silly_dialogue = SillyDialogue()
+        self._commit_list = {}
+        self._announcement_channel = None
 
     async def blast_all_participants(self, message_content):
+        no_response_list = []
         for participant in self._fang_participants:
             try:
                 await participant.send(message_content)
             except:
+                no_response_list.append(participant)
                 print(participant.name + " did not recieve message!!!")
 
     async def on_ready(self):
-        self.initialize_fang_participants();
+        self.initialize_fang_participants()
+        self._announcement_channel = discord.utils.get(self.get_fang_robotics_guild().text_channels, name="team-announcements")
+        await self._announcement_channel.send("hi!")
         print(f'Logged on as {self.user}!')
         # await self.blast_all_participants("This is a mass dm test from Fang Robotics... yay!!!!")
 
@@ -45,4 +51,11 @@ class Sigmafier(discord.Client):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
             return
-        await self._silly_dialogue.on_message(message)
+
+        if message.channel.type == discord.ChannelType.private:
+            self._commit_list[message.author] = message.content
+        else:
+            await self._silly_dialogue.on_message(message)
+
+            if message.content == "!Announce":
+               await self._announcement_channel.send("hi!")
