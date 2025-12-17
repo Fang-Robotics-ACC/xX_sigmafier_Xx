@@ -2,6 +2,12 @@ import discord
 from member_filters import is_fang_participant
 from sillly_dialogue import SillyDialogue
 import shelve
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class HashableUserData:
+    name : str
+    id_number: str
 
 BACKUP_FILE = "brain"
 class Sigmafier(discord.Client):
@@ -48,7 +54,7 @@ class Sigmafier(discord.Client):
         channel = self._announcement_channel
         commit_announcement = "Weekly Commits\n"
         for participant, commit in self._commit_list.items():
-            name = participant[0]
+            name = participant.name
             commit_announcement += f"{name}'s commit is: {commit}\n"
         await channel.send(commit_announcement)
 
@@ -56,7 +62,7 @@ class Sigmafier(discord.Client):
 
         lackers = "**Lacking Commits**\n"
         for participant in  non_commit_participants:
-            id = participant[1]
+            id = participant.id_number
             lackers += f"<@{id}> has no commits\n"
 
         await channel.send(lackers)
@@ -64,7 +70,7 @@ class Sigmafier(discord.Client):
     def hashed_fang_participants(self):
         hashed_fang_participants = []
         for participant in self._fang_participants:
-            hashed_fang_participants.append((participant.name, participant.id))
+            hashed_fang_participants.append(HashableUserData(participant.name, participant.id))
         return hashed_fang_participants
 
     def initialize_fang_participants(self):
@@ -81,7 +87,7 @@ class Sigmafier(discord.Client):
             return
 
         if message.channel.type == discord.ChannelType.private:
-            self._commit_list[(message.author.name, message.author.id)] = message.content
+            self._commit_list[HashableUserData(message.author.name, message.author.id)] = message.content
             self.backup()
         else:
             await self._silly_dialogue.on_message(message)
