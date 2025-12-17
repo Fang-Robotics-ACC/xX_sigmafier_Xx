@@ -22,7 +22,6 @@ class Sigmafier(discord.Client):
     async def on_ready(self):
         self.initialize_fang_participants()
         self._announcement_channel = discord.utils.get(self.get_fang_robotics_guild().text_channels, name="team-announcements")
-        await self._announcement_channel.send("hi!")
         print(f'Logged on as {self.user}!')
         # await self.blast_all_participants("This is a mass dm test from Fang Robotics... yay!!!!")
 
@@ -44,6 +43,17 @@ class Sigmafier(discord.Client):
             name = participant.name
             await channel.send(f"{name}'s commit is: {commit}")
 
+        non_commit_participants = set(self._fang_participants) - set(self._commit_list.keys())
+
+        await channel.send("**Lacking commits**")
+        lackers = ""
+        for participant in  non_commit_participants:
+            name = participant.name
+            lackers += f"{name} has no commits\n"
+
+        await channel.send(lackers)
+
+
     def initialize_fang_participants(self):
         fang_robotics_guild = self.get_fang_robotics_guild()
 
@@ -64,4 +74,3 @@ class Sigmafier(discord.Client):
 
             if message.content == "!Announce":
                 await self._announce_commits()
-                await self._announcement_channel.send("hi!")
