@@ -46,4 +46,3 @@ class Sigmafier(discord.Client):
         if message.author.id == self.user.id:
             return
         await self._silly_dialogue.on_message(message)
-
